@@ -2,27 +2,31 @@ name: Sync to Hugging Face Space
 
 on:
   push:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches: [ "main" ]   # 当 main 分支有更新时触发
+  workflow_dispatch:        # ✅ 支持手动触发
 
 jobs:
   sync:
     runs-on: ubuntu-latest
 
     steps:
+      # 拉取 GitHub 仓库代码（完整历史 + LFS 文件）
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0   # 避免 shallow push 错误
+          lfs: true        # 拉取 Git LFS 文件，解决大文件问题
 
+      # 设置 Git 用户信息
       - name: Setup Git
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "GitHub Actions Bot"
 
+      # 推送到 Hugging Face Space
       - name: Push to Hugging Face Space
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}   # 在 GitHub Secrets 配置 Hugging Face Token
         run: |
           git remote add space https://huggingface.co/spaces/BGdo/pdfmathtranslate-next
           git push --force https://hf:$HF_TOKEN@huggingface.co/spaces/BGdo/pdfmathtranslate-next main
