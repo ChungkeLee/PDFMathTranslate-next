@@ -23,8 +23,8 @@ jobs:
       # 推送到 Hugging Face Space
       - name: Push to Hugging Face Space
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}   # 在 GitHub Secrets 中配置 Hugging Face Token
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git remote add space https://huggingface.co/spaces/BGdo/pdfmathtranslate-next
-          git fetch space
-          git push --force https://user:$HF_TOKEN@huggingface.co/spaces/BGdo/pdfmathtranslate-next main
+          git push --force https://hf:$HF_TOKEN@huggingface.co/spaces/BGdo/pdfmathtranslate-next main
+
